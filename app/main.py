@@ -1,6 +1,7 @@
 import subprocess
 import sys
 import tempfile
+import ctypes
 import shutil
 import os
 
@@ -15,6 +16,12 @@ def main():
     # tempfile.mkdtemp(): This function creates a new temporary directory and returns the path to that directory.
     tmp_dir = tempfile.mkdtemp()
     # This function copies a file from the source path (src) to the destination path (dst).
+    
+    libc = ctypes.cdll.LoadLibrary("libc.so.6")
+
+    libc.unshare(0x20000000)
+
+
     shutil.copy(command, tmp_dir)
     # This function changes the root directory of the current process to the directory specified by path.
     os.chroot(tmp_dir)
